@@ -4,9 +4,18 @@ use std::env;
 use std::path::PathBuf;
 
 fn main() {
-    // Tell cargo to tell rustc to link the system bzip2
-    // shared library.
     println!("cargo:rustc-link-lib=fstack");
+    println!("cargo:rustc-link-lib=rt");
+    println!("cargo:rustc-link-lib=crypto");
+    println!("cargo:rustc-link-lib=m");
+    println!("cargo:rustc-link-lib=dl");
+    println!("cargo:rustc-link-lib=numa");
+
+    pkg_config::Config::new()
+        .print_system_libs(false)
+        .probe("libdpdk")
+        .unwrap();
+    println!("cargo:rustc-link-lib=rte_net_bond");
 
     // Tell cargo to invalidate the built crate whenever the wrapper changes
     println!("cargo:rerun-if-changed=wrapper.h");

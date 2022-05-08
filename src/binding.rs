@@ -753,6 +753,10 @@ pub const AF_INET6_FREEBSD: u32 = 28;
 pub const PF_INET6_FREEBSD: u32 = 28;
 pub const FF_DISPATCH_ERROR: i32 = -1;
 pub const FF_DISPATCH_RESPONSE: i32 = -2;
+pub const _SYS_EPOLL_H: u32 = 1;
+pub const EPOLL_CTL_ADD: u32 = 1;
+pub const EPOLL_CTL_DEL: u32 = 2;
+pub const EPOLL_CTL_MOD: u32 = 3;
 pub type size_t = ::std::os::raw::c_ulong;
 pub type va_list = __builtin_va_list;
 pub type __gnuc_va_list = __builtin_va_list;
@@ -7644,6 +7648,175 @@ extern "C" {
     pub fn ff_ngctl(
         cmd: ::std::os::raw::c_int,
         data: *mut ::std::os::raw::c_void,
+    ) -> ::std::os::raw::c_int;
+}
+pub const EPOLL_CLOEXEC: ::std::os::raw::c_uint = 524288;
+pub type _bindgen_ty_7 = ::std::os::raw::c_uint;
+pub const EPOLL_EVENTS_EPOLLIN: EPOLL_EVENTS = 1;
+pub const EPOLL_EVENTS_EPOLLPRI: EPOLL_EVENTS = 2;
+pub const EPOLL_EVENTS_EPOLLOUT: EPOLL_EVENTS = 4;
+pub const EPOLL_EVENTS_EPOLLRDNORM: EPOLL_EVENTS = 64;
+pub const EPOLL_EVENTS_EPOLLRDBAND: EPOLL_EVENTS = 128;
+pub const EPOLL_EVENTS_EPOLLWRNORM: EPOLL_EVENTS = 256;
+pub const EPOLL_EVENTS_EPOLLWRBAND: EPOLL_EVENTS = 512;
+pub const EPOLL_EVENTS_EPOLLMSG: EPOLL_EVENTS = 1024;
+pub const EPOLL_EVENTS_EPOLLERR: EPOLL_EVENTS = 8;
+pub const EPOLL_EVENTS_EPOLLHUP: EPOLL_EVENTS = 16;
+pub const EPOLL_EVENTS_EPOLLRDHUP: EPOLL_EVENTS = 8192;
+pub const EPOLL_EVENTS_EPOLLEXCLUSIVE: EPOLL_EVENTS = 268435456;
+pub const EPOLL_EVENTS_EPOLLWAKEUP: EPOLL_EVENTS = 536870912;
+pub const EPOLL_EVENTS_EPOLLONESHOT: EPOLL_EVENTS = 1073741824;
+pub const EPOLL_EVENTS_EPOLLET: EPOLL_EVENTS = 2147483648;
+pub type EPOLL_EVENTS = ::std::os::raw::c_uint;
+#[repr(C)]
+#[derive(Copy, Clone)]
+pub union epoll_data {
+    pub ptr: *mut ::std::os::raw::c_void,
+    pub fd: ::std::os::raw::c_int,
+    pub u32_: u32,
+    pub u64_: u64,
+}
+#[test]
+fn bindgen_test_layout_epoll_data() {
+    assert_eq!(
+        ::std::mem::size_of::<epoll_data>(),
+        8usize,
+        concat!("Size of: ", stringify!(epoll_data))
+    );
+    assert_eq!(
+        ::std::mem::align_of::<epoll_data>(),
+        8usize,
+        concat!("Alignment of ", stringify!(epoll_data))
+    );
+    assert_eq!(
+        unsafe { &(*(::std::ptr::null::<epoll_data>())).ptr as *const _ as usize },
+        0usize,
+        concat!(
+            "Offset of field: ",
+            stringify!(epoll_data),
+            "::",
+            stringify!(ptr)
+        )
+    );
+    assert_eq!(
+        unsafe { &(*(::std::ptr::null::<epoll_data>())).fd as *const _ as usize },
+        0usize,
+        concat!(
+            "Offset of field: ",
+            stringify!(epoll_data),
+            "::",
+            stringify!(fd)
+        )
+    );
+    assert_eq!(
+        unsafe { &(*(::std::ptr::null::<epoll_data>())).u32_ as *const _ as usize },
+        0usize,
+        concat!(
+            "Offset of field: ",
+            stringify!(epoll_data),
+            "::",
+            stringify!(u32_)
+        )
+    );
+    assert_eq!(
+        unsafe { &(*(::std::ptr::null::<epoll_data>())).u64_ as *const _ as usize },
+        0usize,
+        concat!(
+            "Offset of field: ",
+            stringify!(epoll_data),
+            "::",
+            stringify!(u64_)
+        )
+    );
+}
+pub type epoll_data_t = epoll_data;
+#[repr(C, packed)]
+#[derive(Copy, Clone)]
+pub struct epoll_event {
+    pub events: u32,
+    pub data: epoll_data_t,
+}
+#[test]
+fn bindgen_test_layout_epoll_event() {
+    assert_eq!(
+        ::std::mem::size_of::<epoll_event>(),
+        12usize,
+        concat!("Size of: ", stringify!(epoll_event))
+    );
+    assert_eq!(
+        ::std::mem::align_of::<epoll_event>(),
+        1usize,
+        concat!("Alignment of ", stringify!(epoll_event))
+    );
+    assert_eq!(
+        unsafe { &(*(::std::ptr::null::<epoll_event>())).events as *const _ as usize },
+        0usize,
+        concat!(
+            "Offset of field: ",
+            stringify!(epoll_event),
+            "::",
+            stringify!(events)
+        )
+    );
+    assert_eq!(
+        unsafe { &(*(::std::ptr::null::<epoll_event>())).data as *const _ as usize },
+        4usize,
+        concat!(
+            "Offset of field: ",
+            stringify!(epoll_event),
+            "::",
+            stringify!(data)
+        )
+    );
+}
+extern "C" {
+    pub fn epoll_create(__size: ::std::os::raw::c_int) -> ::std::os::raw::c_int;
+}
+extern "C" {
+    pub fn epoll_create1(__flags: ::std::os::raw::c_int) -> ::std::os::raw::c_int;
+}
+extern "C" {
+    pub fn epoll_ctl(
+        __epfd: ::std::os::raw::c_int,
+        __op: ::std::os::raw::c_int,
+        __fd: ::std::os::raw::c_int,
+        __event: *mut epoll_event,
+    ) -> ::std::os::raw::c_int;
+}
+extern "C" {
+    pub fn epoll_wait(
+        __epfd: ::std::os::raw::c_int,
+        __events: *mut epoll_event,
+        __maxevents: ::std::os::raw::c_int,
+        __timeout: ::std::os::raw::c_int,
+    ) -> ::std::os::raw::c_int;
+}
+extern "C" {
+    pub fn epoll_pwait(
+        __epfd: ::std::os::raw::c_int,
+        __events: *mut epoll_event,
+        __maxevents: ::std::os::raw::c_int,
+        __timeout: ::std::os::raw::c_int,
+        __ss: *const __sigset_t,
+    ) -> ::std::os::raw::c_int;
+}
+extern "C" {
+    pub fn ff_epoll_create(size: ::std::os::raw::c_int) -> ::std::os::raw::c_int;
+}
+extern "C" {
+    pub fn ff_epoll_ctl(
+        epfd: ::std::os::raw::c_int,
+        op: ::std::os::raw::c_int,
+        fd: ::std::os::raw::c_int,
+        event: *mut epoll_event,
+    ) -> ::std::os::raw::c_int;
+}
+extern "C" {
+    pub fn ff_epoll_wait(
+        epfd: ::std::os::raw::c_int,
+        events: *mut epoll_event,
+        maxevents: ::std::os::raw::c_int,
+        timeout: ::std::os::raw::c_int,
     ) -> ::std::os::raw::c_int;
 }
 pub type __builtin_va_list = [__va_list_tag; 1usize];
